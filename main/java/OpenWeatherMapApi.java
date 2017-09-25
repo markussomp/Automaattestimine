@@ -12,7 +12,6 @@ public class OpenWeatherMapApi {
     public static int getWeatherApiResponseStatus(String url) throws IOException {
         int responseStatus = 200;
         return responseStatus;
-        dasdsad
     }
 
     public static String getWeatherForecastDate(String city) throws IOException {
