@@ -1,8 +1,14 @@
+import Model.CurrentWeatherReport;
+import Model.Request;
 import Repository.OpenWeatherMapApi;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import static Model.Constants.CountryCode;
+import static Model.Constants.Units;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -11,18 +17,31 @@ import static org.junit.Assert.assertEquals;
 public class OpenWeatherMapApiTests {
 
     @Test
-    public void testWeatherApiConnection() throws IOException {
-        assertEquals(OpenWeatherMapApi.getWeatherApiResponse("http://www.example.com/"), "response");
+    public void doesRequestedCityEqualsReportedCity() throws IOException {
+        OpenWeatherMapApi repository = new OpenWeatherMapApi();
+        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
+        assertEquals(request.City, report.City);
     }
 
     @Test
     public void isWeatherApiResponseStatus200() throws IOException {
-        assertEquals(OpenWeatherMapApi.getWeatherApiResponseStatus("http://www.example.com/"), 200);
+        OpenWeatherMapApi repository = new OpenWeatherMapApi();
+        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
+        assertEquals(200, report.ResponseStatusCode);
     }
 
     @Test
-    public void isTodayWeatherForecast() throws IOException {
-        assertEquals(OpenWeatherMapApi.getWeatherForecastDate("Helsinki"), "2017-09-24");
+    public void doesCurrentWeatherDateEqualsToday() throws IOException {
+        OpenWeatherMapApi repository = new OpenWeatherMapApi();
+        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
+
+        String reportDate = new SimpleDateFormat("yyyy.MM.dd").format(report.Date * 1000L);
+        String todayDate = new SimpleDateFormat("yyyy.MM.dd").format(new Date());
+
+        assertEquals(todayDate, reportDate);
     }
 
     @Test
