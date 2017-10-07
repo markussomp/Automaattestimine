@@ -1,3 +1,4 @@
+import Repository.OpenWeatherMapApi;
 import org.junit.Test;
 
 import java.io.IOException;
