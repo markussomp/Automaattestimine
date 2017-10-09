@@ -1,15 +1,18 @@
 import Model.CurrentWeatherReport;
+import Model.OneDayWeatherForecast;
 import Model.Request;
+import Model.ThreeDayWeatherForecast;
 import Repository.OpenWeatherMapApi;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static Model.Constants.CountryCode;
 import static Model.Constants.Units;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Created by Markus on 11.09.2017.
@@ -20,51 +23,57 @@ public class OpenWeatherMapApiTests {
     public void doesRequestedCityEqualsReportedCity() throws IOException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
         Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
-        CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
-        assertEquals(request.City, report.City);
+        CurrentWeatherReport currentReport = repository.GetCurrentWeatherReport(request);
+        assertEquals(request.City, currentReport.City);
     }
 
     @Test
-    public void isWeatherApiResponseStatus200() throws IOException {
+    public void isCurrentWeatherResponseStatus200() throws IOException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
         Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
-        CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
-        assertEquals(200, report.ResponseStatusCode);
+        CurrentWeatherReport currentReport = repository.GetCurrentWeatherReport(request);
+        assertEquals(200, currentReport.ResponseStatusCode);
     }
 
     @Test
     public void doesCurrentWeatherDateEqualsToday() throws IOException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
         Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
-        CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
+        CurrentWeatherReport currentReport = repository.GetCurrentWeatherReport(request);
 
-        String reportDate = new SimpleDateFormat("yyyy.MM.dd").format(report.Date * 1000L);
+        String reportDate = new SimpleDateFormat("yyyy.MM.dd").format(currentReport.Date * 1000L);
         String todayDate = new SimpleDateFormat("yyyy.MM.dd").format(new Date());
 
         assertEquals(todayDate, reportDate);
     }
 
     @Test
-    public void doesWeatherApiReturnThreeDayForecast() throws IOException {
-        assertEquals(OpenWeatherMapApi.getWeatherThreeDayForecast("Helsinki"), "threeDayForecast");
+    public void isForecastResponseStatus200() throws IOException, ParseException {
+        OpenWeatherMapApi repository = new OpenWeatherMapApi();
+        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        ThreeDayWeatherForecast forecastReport = repository.GetThreeDayWeatherForecast(request);
+        assertEquals(200, forecastReport.ResponseStatusCode);
     }
 
     @Test
-    public void doesWeatherApiReturnCityCoordinates() throws IOException {
-        assertEquals(OpenWeatherMapApi.getCityCoordinates("Helsinki"), "xxx:yyy");
+    public void doesForecastReturnCityCoordinates() throws IOException, ParseException {
+        OpenWeatherMapApi repository = new OpenWeatherMapApi();
+        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        ThreeDayWeatherForecast forecastReport = repository.GetThreeDayWeatherForecast(request);
+        assertNotNull(forecastReport.Longitude);
+        assertNotNull(forecastReport.Latitude);
     }
 
     @Test
-    public void doesWeatherApiReturnLowestAndHighestTemp() throws IOException {
+    public void isForecastHighestTempGreaterThanLowestTemp() throws IOException, ParseException {
 
-        boolean hasLowestAndHighestTemp;
+        OpenWeatherMapApi repository = new OpenWeatherMapApi();
+        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        ThreeDayWeatherForecast forecastReport = repository.GetThreeDayWeatherForecast(request);
 
-        if (OpenWeatherMapApi.getThreeDayForecastLowestAndHighestTemp("Helsinki").isEmpty()) {
-            hasLowestAndHighestTemp = false;
-        } else {
-            hasLowestAndHighestTemp = true;
+        for (OneDayWeatherForecast oneDayWeatherForecast : forecastReport.Forecasts) {
+            assertTrue(oneDayWeatherForecast.MaxTemp >= oneDayWeatherForecast.MinTemp);
+
         }
-
-        assertEquals(hasLowestAndHighestTemp, true);
     }
 }

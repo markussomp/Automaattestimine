@@ -58,8 +58,8 @@ public class OpenWeatherMapApi implements WeatherApiInterface {
 
     @Override
     public ThreeDayWeatherForecast GetThreeDayWeatherForecast(Request request) throws IOException, ParseException {
+
         URL forecastURL = GetURLForWeatherForecast(request);
-        System.out.println(forecastURL.toString());
         InputStream inputStream = forecastURL.openStream();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -70,17 +70,21 @@ public class OpenWeatherMapApi implements WeatherApiInterface {
 
         JSONObject forecastJson = new JSONObject(stringBuilder.toString());
 
-        JSONObject coordinates = forecastJson.getJSONObject("coord");
+        JSONObject cityInfo = forecastJson.getJSONObject("city");
+        JSONObject coordinates = cityInfo.getJSONObject("coord");
         double longitude = coordinates.getDouble("lon");
         double latitude = coordinates.getDouble("lon");
-        String city = forecastJson.getString("name");
+        String city = cityInfo.getString("name");
 
-        ThreeDayWeatherForecast forecast = new ThreeDayWeatherForecast(city, longitude, latitude);
+        HttpURLConnection http = (HttpURLConnection) forecastURL.openConnection();
+        int responseStatusCode = http.getResponseCode();
+
+        ThreeDayWeatherForecast forecast = new ThreeDayWeatherForecast(city, longitude, latitude, responseStatusCode);
 
         JSONArray forecastList = forecastJson.getJSONArray("list");
 
-        for (int i = 0; i < forecastList.length(); i++) {
-            JSONObject hourlyWeather = forecastList.getJSONObject(i);
+        for (int countingIndex = 0; countingIndex < forecastList.length(); countingIndex++) {
+            JSONObject hourlyWeather = forecastList.getJSONObject(countingIndex);
             String date = hourlyWeather.getString("dt_txt");
             JSONObject temperatures = hourlyWeather.getJSONObject("main");
             double maxTemp = temperatures.getDouble("temp_max");
