@@ -21,4 +21,9 @@ public class CurrentWeatherReport {
         ResponseStatusCode = responseStatusCode;
 
     }
+
+    @Override
+    public String toString() {
+        return "Current weather report:" + System.lineSeparator() + "City: " + City + "; Date: " + Date + "; Current Temperature: " + CurrentTemp + "; Latitude: " + Latitude + "; Longitude: " + Longitude;
+    }
 }

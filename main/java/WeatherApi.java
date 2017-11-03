@@ -38,18 +38,15 @@ public class WeatherApi {
             countryCode = countryCode.toUpperCase();
         }
 
-
         Request request = new Request(city, countryCode, Constants.Units.metric);
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
         CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
         ThreeDayWeatherForecast forecast = repository.GetThreeDayWeatherForecast((request));
 
-        String output = //SIIN EI OSKA
+        String output = report.toString() + System.lineSeparator() + forecast.toString();
 
-
-                Path file = Paths.get("output.txt");
+        Path file = Paths.get("output.txt");
         Files.write(file, output.getBytes());
-
 
     }
 }

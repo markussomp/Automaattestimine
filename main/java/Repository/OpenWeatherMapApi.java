@@ -17,8 +17,6 @@ import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import static Model.Constants.API_KEY;
 
@@ -47,7 +45,7 @@ public class OpenWeatherMapApi implements WeatherApiInterface {
         Double currentTemp = main.getDouble("temp");
         JSONObject coordinates = currentWeatherJson.getJSONObject("coord");
         double longitude = coordinates.getDouble("lon");
-        double latitude = coordinates.getDouble("lon");
+        double latitude = coordinates.getDouble("lat");
 
         HttpURLConnection http = (HttpURLConnection) currentWeatherURL.openConnection();
         int responseStatusCode = http.getResponseCode();
@@ -73,7 +71,7 @@ public class OpenWeatherMapApi implements WeatherApiInterface {
         JSONObject cityInfo = forecastJson.getJSONObject("city");
         JSONObject coordinates = cityInfo.getJSONObject("coord");
         double longitude = coordinates.getDouble("lon");
-        double latitude = coordinates.getDouble("lon");
+        double latitude = coordinates.getDouble("lat");
         String city = cityInfo.getString("name");
 
         HttpURLConnection http = (HttpURLConnection) forecastURL.openConnection();
@@ -117,40 +115,5 @@ public class OpenWeatherMapApi implements WeatherApiInterface {
     public URL GetURLForWeatherForecast(Request request) throws MalformedURLException {
         String URLString = "http://api.openweathermap.org/data/2.5/forecast?q=" + request.City + "," + request.country + "&units=" + request.units.name() + "&appid=" + API_KEY;
         return new URL(URLString);
-    }
-
-
-
-
-
-
-
-    public static int getWeatherApiResponseStatus(String url) throws IOException {
-        int responseStatus = 200;
-        return responseStatus;
-    }
-
-    public static String getWeatherForecastDate(String city) throws IOException {
-        String date = "2017-09-24";
-        return date;
-    }
-
-    public static String getWeatherThreeDayForecast(String city) throws IOException {
-        String threeDayForecast = "threeDayForecast";
-        return threeDayForecast;
-    }
-
-    public static String getCityCoordinates(String city) throws IOException {
-        String coordinates = "xxx:yyy";
-        return coordinates;
-    }
-
-    public static List<String> getThreeDayForecastLowestAndHighestTemp(String city) throws IOException {
-        String lowTemp = getWeatherThreeDayForecast(city);
-        String highTemp = getWeatherThreeDayForecast(city);
-        List<String> lowAndHighTemp = new ArrayList<String>();
-        lowAndHighTemp.add(lowTemp);
-        lowAndHighTemp.add(highTemp);
-        return lowAndHighTemp;
     }
 }

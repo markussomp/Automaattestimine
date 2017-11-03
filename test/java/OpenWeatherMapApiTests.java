@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static Model.Constants.CountryCode;
 import static Model.Constants.Units;
 import static org.junit.Assert.*;
 
@@ -22,7 +21,7 @@ public class OpenWeatherMapApiTests {
     @Test
     public void doesRequestedCityEqualsReportedCity() throws IOException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
-        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        Request request = new Request("Tallinn", "EE", Units.metric);
         CurrentWeatherReport currentReport = repository.GetCurrentWeatherReport(request);
         assertEquals(request.City, currentReport.City);
     }
@@ -30,7 +29,7 @@ public class OpenWeatherMapApiTests {
     @Test
     public void isCurrentWeatherResponseStatus200() throws IOException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
-        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        Request request = new Request("Tallinn", "EE", Units.metric);
         CurrentWeatherReport currentReport = repository.GetCurrentWeatherReport(request);
         assertEquals(200, currentReport.ResponseStatusCode);
     }
@@ -38,7 +37,7 @@ public class OpenWeatherMapApiTests {
     @Test
     public void doesCurrentWeatherDateEqualsToday() throws IOException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
-        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        Request request = new Request("Tallinn", "EE", Units.metric);
         CurrentWeatherReport currentReport = repository.GetCurrentWeatherReport(request);
 
         String reportDate = new SimpleDateFormat("yyyy.MM.dd").format(currentReport.Date * 1000L);
@@ -50,7 +49,7 @@ public class OpenWeatherMapApiTests {
     @Test
     public void isForecastResponseStatus200() throws IOException, ParseException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
-        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        Request request = new Request("Tallinn", "EE", Units.metric);
         ThreeDayWeatherForecast forecastReport = repository.GetThreeDayWeatherForecast(request);
         assertEquals(200, forecastReport.ResponseStatusCode);
     }
@@ -58,7 +57,7 @@ public class OpenWeatherMapApiTests {
     @Test
     public void doesForecastReturnCityCoordinates() throws IOException, ParseException {
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
-        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        Request request = new Request("Tallinn", "EE", Units.metric);
         ThreeDayWeatherForecast forecastReport = repository.GetThreeDayWeatherForecast(request);
         assertNotNull(forecastReport.Longitude);
         assertNotNull(forecastReport.Latitude);
@@ -68,7 +67,7 @@ public class OpenWeatherMapApiTests {
     public void isForecastHighestTempGreaterThanLowestTemp() throws IOException, ParseException {
 
         OpenWeatherMapApi repository = new OpenWeatherMapApi();
-        Request request = new Request("Tallinn", CountryCode.EE, Units.metric);
+        Request request = new Request("Tallinn", "EE", Units.metric);
         ThreeDayWeatherForecast forecastReport = repository.GetThreeDayWeatherForecast(request);
 
         for (OneDayWeatherForecast oneDayWeatherForecast : forecastReport.Forecasts) {

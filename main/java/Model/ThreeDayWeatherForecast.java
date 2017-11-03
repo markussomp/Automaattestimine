@@ -31,4 +31,12 @@ public class ThreeDayWeatherForecast {
         }
 
     }
+
+    @Override
+    public String toString() {
+        return "Forecast report:" + System.lineSeparator() + "City: " + City + "; Forecast info: " + Forecasts.get(0).ForecastDate + "[min: " + Forecasts.get(0).MinTemp +
+                "; max: " + Forecasts.get(0).MaxTemp + "] " + Forecasts.get(1).ForecastDate + "[min: " + Forecasts.get(1).MinTemp +
+                "; max: " + Forecasts.get(1).MaxTemp + "] " + Forecasts.get(2).ForecastDate + "[min: " + Forecasts.get(2).MinTemp +
+                "; max: " + Forecasts.get(2).MaxTemp + "]; Latitude: " + Latitude + "; Longitude: " + Longitude;
+    }
 }
