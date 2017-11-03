@@ -110,12 +110,12 @@ public class OpenWeatherMapApi implements WeatherApiInterface {
 
     public URL GetURLForCurrentWeather(Request request) throws MalformedURLException {
 
-        String URLString = "http://api.openweathermap.org/data/2.5/weather?q=" + request.City + "," + request.country.name() + "&units=" + request.units.name() + "&appid=" + API_KEY;
+        String URLString = "http://api.openweathermap.org/data/2.5/weather?q=" + request.City + "," + request.country + "&units=" + request.units.name() + "&appid=" + API_KEY;
         return new URL(URLString);
     }
 
     public URL GetURLForWeatherForecast(Request request) throws MalformedURLException {
-        String URLString = "http://api.openweathermap.org/data/2.5/forecast?q=" + request.City + "," + request.country.name() + "&units=" + request.units.name() + "&appid=" + API_KEY;
+        String URLString = "http://api.openweathermap.org/data/2.5/forecast?q=" + request.City + "," + request.country + "&units=" + request.units.name() + "&appid=" + API_KEY;
         return new URL(URLString);
     }
 
