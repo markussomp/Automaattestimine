@@ -40,8 +40,8 @@ public class OpenWeatherMapApiTests {
         Request request = new Request("Tallinn", "EE", Units.metric);
         CurrentWeatherReport currentReport = repository.GetCurrentWeatherReport(request);
 
-        String reportDate = new SimpleDateFormat("yyyy.MM.dd").format(currentReport.Date * 1000L);
-        String todayDate = new SimpleDateFormat("yyyy.MM.dd").format(new Date());
+        String reportDate = currentReport.Date.substring(0, 10);
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
         assertEquals(todayDate, reportDate);
     }

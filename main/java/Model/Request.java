@@ -5,12 +5,12 @@ package Model;
  */
 public class Request {
     public String City;
-    public String country;
-    public Constants.Units units;
+    public String Country;
+    public Constants.Units Units;
 
     public Request(String city, String countryCode, Constants.Units requestUnits) {
         this.City = city;
-        this.country = countryCode;
-        this.units = requestUnits;
+        this.Country = countryCode;
+        this.Units = requestUnits;
     }
 }

@@ -8,11 +8,11 @@ public class CurrentWeatherReport {
     public final String City;
     public final double Longitude;
     public final double Latitude;
-    public final int Date;
+    public final String Date;
     public final int ResponseStatusCode;
 
 
-    public CurrentWeatherReport(double currentTemp, String city, double longitude, double latitude, int date, int responseStatusCode) {
+    public CurrentWeatherReport(double currentTemp, String city, double longitude, double latitude, String date, int responseStatusCode) {
         CurrentTemp = currentTemp;
         City = city;
         Longitude = longitude;
