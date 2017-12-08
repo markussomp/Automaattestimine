@@ -15,4 +15,6 @@ public class Constants {
         metric, imperial
     }
 
+    public static boolean mock = true;
+
 }
