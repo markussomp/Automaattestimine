@@ -5,14 +5,14 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import static Model.Constants.Units;
+import static Model.FileReader.fileReader;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -124,11 +124,15 @@ public class OpenWeatherMapApiTests {
     }
 
     @Test
-    public void isWritingAndReadingWorking() throws IOException {
-        String output = "test";
-        Path file = Paths.get("test.txt");
-        Files.write(file, output.getBytes());
-        assertEquals(output, Files.readAllLines(file).get(0).toString());
+    public void doesFileReaderCompilesExpectedRequestTest() throws IOException {
+        Request expectedRequest = new Request("Tallinn", "EE", Units.metric);
+        if (Constants.mock) {
+            when(fileReader("input.txt"))
+                    .thenReturn(new ArrayList<String>(Arrays.asList("Tallinn", "EE")));
+        }
+        Request request = new Request(fileReader("input.txt").get(0), fileReader("input.txt").get(1), Constants.Units.metric);
+        assertEquals(expectedRequest.City, request.City);
 
     }
 }
+

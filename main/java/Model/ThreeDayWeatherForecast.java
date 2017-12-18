@@ -24,8 +24,8 @@ public class ThreeDayWeatherForecast {
         for (int countingIndex = 0; countingIndex < 3; countingIndex++) {
             OneDayWeatherForecast oneDayWeatherForecast = new OneDayWeatherForecast();
             oneDayWeatherForecast.ForecastDate = LocalDate.now().plusDays(1 + countingIndex);
-            oneDayWeatherForecast.MaxTemp = -Double.MAX_VALUE;
-            oneDayWeatherForecast.MinTemp = Double.MAX_VALUE;
+            oneDayWeatherForecast.MaxTemp = -1;
+            oneDayWeatherForecast.MinTemp = 1;
 
             Forecasts.add(oneDayWeatherForecast);
         }

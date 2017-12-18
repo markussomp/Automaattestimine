@@ -1,8 +1,5 @@
-import Model.Constants;
-import Model.CurrentWeatherReport;
-import Model.Request;
-import Model.ThreeDayWeatherForecast;
-import Repository.OpenWeatherMapApi;
+import Model.FileReader;
+import Model.FileWriter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,11 +18,12 @@ public class WeatherApi {
         String city;
         String countryCode;
 
-        Path inputPath = Paths.get("input.txt");
-        List<String> cityList = new ArrayList<>();
-        List<String> countryCodeList = new ArrayList<>();
+        String inputName = "input.txt";
+        Path inputPath = Paths.get(inputName);
+        ArrayList<String> cityList = new ArrayList<>();
+        ArrayList<String> countryCodeList = new ArrayList<>();
         if (Files.exists(inputPath)) {
-            List<String> items = Files.readAllLines(inputPath);
+            List<String> items = FileReader.fileReader(inputName);
             for (int countingIndex = 0; countingIndex < items.size(); countingIndex++) {
                 if (countingIndex % 2 == 0) {
                     city = items.get(countingIndex);
@@ -50,18 +48,7 @@ public class WeatherApi {
             countryCodeList.add(countryCode);
         }
 
-        for (int countingIndex = 0; countingIndex < cityList.size(); countingIndex++) {
-            Request request = new Request(cityList.get(countingIndex), countryCodeList.get(countingIndex), Constants.Units.metric);
-            OpenWeatherMapApi repository = new OpenWeatherMapApi();
-            CurrentWeatherReport report = repository.GetCurrentWeatherReport(request);
-            ThreeDayWeatherForecast forecast = repository.GetThreeDayWeatherForecast((request));
-
-            String output = report.toString() + System.lineSeparator() + forecast.toString();
-
-            String fileName = cityList.get(countingIndex);
-            Path file = Paths.get(fileName + ".txt");
-            Files.write(file, output.getBytes());
-        }
+        FileWriter.fileWriter(cityList, countryCodeList);
 
     }
 }
