@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 import static Model.Constants.Units;
-import static Model.FileReader.fileReader;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,14 +22,17 @@ import static org.mockito.Mockito.when;
 public class OpenWeatherMapApiTests {
 
     public static OpenWeatherMapApi repository;
+    public static FileReader fileReader;
 
     @BeforeClass
     public static void setUpClass() throws IOException {
 
         if (Constants.mock) {
             repository = Mockito.mock(OpenWeatherMapApi.class);
+            fileReader = Mockito.mock(FileReader.class);
         } else {
             repository = new OpenWeatherMapApi();
+            fileReader = new FileReader();
         }
     }
 
@@ -127,10 +129,10 @@ public class OpenWeatherMapApiTests {
     public void doesFileReaderCompilesExpectedRequestTest() throws IOException {
         Request expectedRequest = new Request("Tallinn", "EE", Units.metric);
         if (Constants.mock) {
-            when(fileReader("input.txt"))
+            when(fileReader.fileReader("input.txt"))
                     .thenReturn(new ArrayList<String>(Arrays.asList("Tallinn", "EE")));
         }
-        Request request = new Request(fileReader("input.txt").get(0), fileReader("input.txt").get(1), Constants.Units.metric);
+        Request request = new Request(fileReader.fileReader("input.txt").get(0), fileReader.fileReader("input.txt").get(1), Constants.Units.metric);
         assertEquals(expectedRequest.City, request.City);
 
     }

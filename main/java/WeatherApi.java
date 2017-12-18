@@ -14,16 +14,20 @@ import java.util.Scanner;
  * Created by Markus on 3.11.2017.
  */
 public class WeatherApi {
+    public static FileReader fileReader;
+
     public static void main(String[] args) throws IOException, ParseException {
         String city;
         String countryCode;
+
+        fileReader = new FileReader();
 
         String inputName = "input.txt";
         Path inputPath = Paths.get(inputName);
         ArrayList<String> cityList = new ArrayList<>();
         ArrayList<String> countryCodeList = new ArrayList<>();
         if (Files.exists(inputPath)) {
-            List<String> items = FileReader.fileReader(inputName);
+            List<String> items = fileReader.fileReader(inputName);
             for (int countingIndex = 0; countingIndex < items.size(); countingIndex++) {
                 if (countingIndex % 2 == 0) {
                     city = items.get(countingIndex);
